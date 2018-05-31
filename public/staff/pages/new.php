@@ -33,14 +33,14 @@ if(is_post_request()) {
     <form action="<?php echo url_for('/staff/pages/new.php'); ?>" method="post">
       <dl>
         <dt>Menu Name</dt>
-        <dd><input type="text" name="menu_name" value="<?php echo $menu_name; ?>" /></dd>
+        <dd><input type="text" name="menu_name" value="<?php echo h($menu_name); ?>" /></dd>
       </dl>
       <dl>
         <dt>Position</dt>
         <dd>
           <select name="position">
-            <option value="1" <?php echo ($position == '1') ? 'selected' : ''; ?> >1</option>
-            <option value="2" <?php echo ($position == '2') ? 'selected' : ''; ?> >2</option>
+            <option value="1" <?php echo ($position == '1') ? ' selected' : ''; ?> >1</option>
+            <option value="2" <?php echo ($position == '2') ? ' selected' : ''; ?> >2</option>
           </select>
         </dd>
       </dl>
@@ -48,7 +48,7 @@ if(is_post_request()) {
         <dt>Visible</dt>
         <dd>
           <input type="hidden" name="visible" value="0" />
-          <input type="checkbox" name="visible" value="1" <?php echo ($visible == '1') ? 'checked' : ''; ?>/>
+          <input type="checkbox" name="visible" value="1" <?php echo ($visible == '1') ? ' checked' : ''; ?>/>
         </dd>
       </dl>
       <div id="operations">
