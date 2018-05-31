@@ -4,3 +4,10 @@
 	
   </body>
 </html>
+
+<?php 
+if($db) {
+	db_disconnect($db);
+} 
+
+?>
