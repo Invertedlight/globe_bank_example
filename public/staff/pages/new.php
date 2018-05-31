@@ -1,5 +1,11 @@
 <?php require_once('../../../private/initialize.php'); ?>
+
 <?php
+require_once('../../../private/initialize.php');
+$menu_name = $_POST['menu_name'] ?? '';
+$position = $_POST['position'] ?? '';
+$visible = $_POST['visible'] ?? '';
+
 if(is_post_request()) {
   // Handle form values sent by new.php
 
@@ -11,12 +17,10 @@ if(is_post_request()) {
   echo "Menu name: " . $menu_name . "<br />";
   echo "Position: " . $position . "<br />";
   echo "Visible: " . $visible . "<br />";
-} else {
-  redirect_to(url_for('/staff/pages/new.php'));
-}
+} 
 ?>
 
-<?php $page_title = 'Create Subject'; ?>
+<?php $page_title = 'Create Page'; ?>
 <?php include(SHARED_PATH . '/staff_header.php'); ?>
 
 <div id="content">
@@ -26,16 +30,17 @@ if(is_post_request()) {
   <div class="subject new">
     <h1>Create Page</h1>
 
-    <form action="<?php echo url_for('/staff/subjects/create.php'); ?>" method="post">
+    <form action="<?php echo url_for('/staff/pages/new.php'); ?>" method="post">
       <dl>
         <dt>Menu Name</dt>
-        <dd><input type="text" name="menu_name" value="" /></dd>
+        <dd><input type="text" name="menu_name" value="<?php echo $menu_name; ?>" /></dd>
       </dl>
       <dl>
         <dt>Position</dt>
         <dd>
           <select name="position">
-            <option value="1">1</option>
+            <option value="1" <?php echo ($position == '1') ? 'selected' : ''; ?> >1</option>
+            <option value="2" <?php echo ($position == '2') ? 'selected' : ''; ?> >2</option>
           </select>
         </dd>
       </dl>
@@ -43,7 +48,7 @@ if(is_post_request()) {
         <dt>Visible</dt>
         <dd>
           <input type="hidden" name="visible" value="0" />
-          <input type="checkbox" name="visible" value="1" />
+          <input type="checkbox" name="visible" value="1" <?php echo ($visible == '1') ? 'checked' : ''; ?>/>
         </dd>
       </dl>
       <div id="operations">
