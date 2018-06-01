@@ -8,6 +8,7 @@ $page['menu_name'] = $_POST['menu_name'] ?? '';
 $page['position'] = $_POST['position'] ?? '';
 $page['visible'] = $_POST['visible'] ?? '';
 $page['subject_id'] = $_POST['subject_id'] ?? '';
+$page['content'] = $_POST['content'] ?? '';
 
 if(is_post_request()) {
   // Handle form values sent by new.php
@@ -17,11 +18,13 @@ if(is_post_request()) {
   $page['position'] = $_POST['position'] ?? '';
   $page['visible'] = $_POST['visible'] ?? '';
   $page['subject_id'] = $_POST['subject_id'] ?? '';
+  $page['content'] = $_POST['content'] ?? '';
 
-  $result = insert_page($page['menu_name'], $page['subject_id'], $page['position'], $page['visible']);
-  $new_id = mysqli_insert_id($db);
+  $errors = insert_page($page);
+  if($errors === true) {
+    $new_id = mysqli_insert_id($db);
     redirect_to(url_for('/staff/pages/show.php?id=' . $new_id));
-
+  }
 } 
 
 $subject_set = find_all_subjects();
@@ -44,6 +47,8 @@ $page['position'] = $page_count + 1;
 
   <div class="page new">
     <h1>Create Page</h1>
+
+    <?php echo display_errors($errors); ?>
 
     <form action="<?php echo url_for('/staff/pages/new.php'); ?>" method="post">
       <dl>
@@ -83,6 +88,12 @@ $page['position'] = $page_count + 1;
         <dd>
           <input type="hidden" name="visible" value="0" />
           <input type="checkbox" name="visible" value="1" <?php echo ($page['visible'] == '1') ? ' checked' : ''; ?>/>
+        </dd>
+      </dl>
+      <dl>
+        <dt>Page Content</dt>
+        <dd>
+          <textarea rows="10" cols="50" name="content"><?php echo $page['content']; ?></textarea> . 
         </dd>
       </dl>
       <div id="operations">

@@ -43,4 +43,33 @@ function is_get_request() {
 	return $_SERVER['REQUEST_METHOD'] == 'GET';
 }
 
+function var_dump_pre($mixed = null) {
+  echo '<pre>';
+  var_dump($mixed);
+  echo '</pre>';
+  return null;
+}
+
+function var_dump_ret($mixed = null) {
+  ob_start();
+  var_dump($mixed);
+  $content = ob_get_contents();
+  ob_end_clean();
+  return $content;
+}
+
+function display_errors($errors=array()) {
+	$output = '';
+	if(!empty($errors)) {
+		$output .= "<div class=\"errors\">";
+		$output .= "Please fix the following errors:";
+		$output .= "<ul>";
+		foreach($errors as $error) {
+			$output .= "<li>" . h($error) . "</li>";
+		}
+		$output .= "</ul>";
+		$output .= "</div>";
+	}
+	return $output;
+}
 ?>

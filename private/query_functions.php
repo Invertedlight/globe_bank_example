@@ -48,7 +48,7 @@ function find_page_and_subject_name_by_page_id($id) {
 	global $db;
 	$sql = "SELECT b.menu_name as subject_name,";
 	$sql .= " b.id as subject_id,";
-	$sql .= " a.menu_name, a.position, a.id, a.visible ";
+	$sql .= " a.menu_name, a.position, a.id, a.visible, a.content ";
 	$sql .= " FROM pages a, subjects b ";
 	$sql .= " WHERE a.id='" . $id . "'";
 	$sql .= " AND b.id = a.subject_id";
@@ -61,15 +61,95 @@ function find_page_and_subject_name_by_page_id($id) {
 	return $page;
 }
 
-function insert_subject($menu_name, $position, $visible) {
+function validate_subject($subject) {
+  $errors = [];
+
+  // menu_name
+  if(is_blank($subject['menu_name'])) {
+    $errors[] = "Name cannot be blank.";
+  } 
+
+  if(!has_length($subject['menu_name'], ['min' => 2, 'max' => 255])) {
+    $errors[] = "Name must be between 2 and 255 characters.";
+  }
+
+  // position
+  // Make sure we are working with an integer
+  $postion_int = (int) $subject['position'];
+  if($postion_int <= 0) {
+    $errors[] = "Position must be greater than zero.";
+  }
+  if($postion_int > 999) {
+    $errors[] = "Position must be less than 999.";
+  }
+
+  // visible
+  // Make sure we are working with a string
+  $visible_str = (string) $subject['visible'];
+  if(!has_inclusion_of($visible_str, ["0","1"])) {
+    $errors[] = "Visible must be true or false.";
+  }
+
+  return $errors;
+}
+
+function validate_page($page) {
+    $errors = [];
+
+    // subject_id
+    if(is_blank($page['subject_id'])) {
+      $errors[] = "Subject cannot be blank.";
+    }
+
+    // menu_name
+    if(is_blank($page['menu_name'])) {
+      $errors[] = "Name cannot be blank.";
+    } 
+
+    if(!has_length($page['menu_name'], ['min' => 2, 'max' => 255])) {
+      $errors[] = "Name must be between 2 and 255 characters.";
+    }
+
+    // position
+    // Make sure we are working with an integer
+    $postion_int = (int) $page['position'];
+    if($postion_int <= 0) {
+      $errors[] = "Position must be greater than zero.";
+    }
+    if($postion_int > 999) {
+      $errors[] = "Position must be less than 999.";
+    }
+
+    // visible
+    // Make sure we are working with a string
+    $visible_str = (string) $page['visible'];
+    if(!has_inclusion_of($visible_str, ["0","1"])) {
+      $errors[] = "Visible must be true or false.";
+    }
+
+    // content
+    if(is_blank($page['content'])) {
+      $errors[] = "Content cannot be blank.";
+    }
+
+    return $errors;
+  }
+
+function insert_subject($subject) {
 	global $db;
+
+	$errors = validate_page($subject);
+	if(!empty($errors)) {
+		return $errors;
+		var_dump_pre($errors);
+	}
 
 	$sql = "INSERT INTO subjects ";
 	$sql .= "(menu_name, position, visible) ";
 	$sql .= "VALUES (";
-	$sql .= "'" . $menu_name . "',";
-	$sql .= "'" . $position . "',";
-	$sql .= "'" . $visible . "'";
+	$sql .= "'" . $subject['menu_name'] . "',";
+	$sql .= "'" . $subject['position'] . "',";
+	$sql .= "'" . $subject['visible'] . "'";
 	$sql .= ")";
 	//echo $sql;
 	$result = mysqli_query($db, $sql); 
@@ -85,16 +165,22 @@ function insert_subject($menu_name, $position, $visible) {
 	}
 }
 
-function insert_page($menu_name, $subject_id, $position, $visible) {
+function insert_page($page) {
 	global $db;
 
+	$errors = validate_page($page);
+	if(!empty($errors)) {
+		return $errors;
+	}
+
 	$sql = "INSERT INTO pages ";
-	$sql .= "(menu_name, subject_id, position, visible) ";
+	$sql .= "(menu_name, subject_id, position, visible, content) ";
 	$sql .= "VALUES (";
-	$sql .= "'" . $menu_name . "',";
-	$sql .= "'" . $subject_id . "',";
-	$sql .= "'" . $position . "',";
-	$sql .= "'" . $visible . "'";
+	$sql .= "'" . $page['menu_name'] . "', ";
+	$sql .= "'" . $page['subject_id'] . "', ";
+	$sql .= "'" . $page['position'] . "', ";
+	$sql .= "'" . $page['visible'] . "', ";
+	$sql .= "'" . $page['content'] . "' ";
 	$sql .= ")";
 	echo $sql;
 	$result = mysqli_query($db, $sql); 
@@ -112,6 +198,12 @@ function insert_page($menu_name, $subject_id, $position, $visible) {
 
 function update_subject($subject) {
 	global $db;
+
+	$errors = validate_subject($subject);
+	if(!empty($errors)) {
+		return $errors;
+		var_dump_pre($errors);
+	}
 
 	$sql = "update subjects set ";
   $sql .= "menu_name ='" . $subject['menu_name'] . "', ";
@@ -136,11 +228,17 @@ function update_subject($subject) {
 function update_page($page) {
 	global $db;
 
+	$errors = validate_page($page);
+	if(!empty($errors)) {
+		return $errors;
+	}
+
 	$sql = "update pages set ";
   $sql .= "menu_name ='" . $page['menu_name'] . "', ";
   $sql .= "subject_id='" . $page['subject_id'] . "', ";
   $sql .= "position='" . $page['position'] . "', ";
-  $sql .= "visible='" . $page['visible'] . "' ";
+  $sql .= "visible='" . $page['visible'] . "', ";
+  $sql .= "content='" . $page['content'] . "' ";
   $sql .= "WHERE id='" . $page['id'] . "' ";
   $sql .= "LIMIT 1";
   echo $sql;

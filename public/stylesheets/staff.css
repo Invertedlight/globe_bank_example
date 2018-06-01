@@ -113,7 +113,7 @@ dd {
   margin-left: 5em;
 }
 
-.warning {
+.warning, pre {
   display: inline-block;
   border: 2px solid red;
   color: red;

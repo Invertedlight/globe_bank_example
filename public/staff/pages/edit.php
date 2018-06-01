@@ -11,6 +11,7 @@ $page['subject_id'] = $_POST['subject_id'] ?? '1';
 $page['menu_name'] = $_POST['menu_name'] ?? '';
 $page['position'] = $_POST['position'] ?? '';
 $page['visible'] = $_POST['visible'] ?? '';
+$page['content'] = $_POST['content'] ?? '';
 
 if(is_post_request()) {
   // Handle form values sent by new.php
@@ -20,17 +21,22 @@ if(is_post_request()) {
   $page['menu_name'] = $_POST['menu_name'] ?? '';
   $page['position'] = $_POST['position'] ?? '';
   $page['visible'] = $_POST['visible'] ?? '';
+  $page['content'] = $_POST['content'] ?? '';
 
-  $result = update_page($page);
-  redirect_to(url_for('/staff/pages/show.php?id=' . $id));
-
+  $errors = update_page($page);
+  if($errors === true) {
+    redirect_to(url_for('/staff/pages/show.php?id=' . $id));
+  }
 } else {
 
   $page = find_page_by_id($id);
-  $page_set = find_all_pages();
-  $page_count = mysqli_num_rows($page_set);
-  mysqli_free_result($page_set);
+
 }
+
+$page_set = find_all_pages();
+$page_count = mysqli_num_rows($page_set);
+mysqli_free_result($page_set);
+
 ?>
 
 <?php $subject_set = find_all_subjects(); ?>
@@ -44,6 +50,8 @@ if(is_post_request()) {
 
   <div class="page edit">
     <h1>Edit Page</h1>
+
+    <?php echo display_errors($errors); ?>
 
     <form action="<?php echo url_for('/staff/pages/edit.php?id=' . h(u($id))); ?>" method="post">
       <dl>
@@ -83,6 +91,12 @@ if(is_post_request()) {
         <dd>
           <input type="hidden" name="visible" value="0" />
           <input type="checkbox" name="visible" value="1" <?php echo ($page['visible'] == 1) ? ' checked' : ''; ?> />
+        </dd>
+      </dl>
+      <dl>
+        <dt>Page Content</dt>
+        <dd>
+          <textarea rows="10" cols="50" name="content"><?php echo $page['content']; ?></textarea> . 
         </dd>
       </dl>
       <div id="operations">

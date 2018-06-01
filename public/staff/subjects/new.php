@@ -14,9 +14,11 @@ if(is_post_request()) {
 	$subject['position'] = $_POST['position'] ?? '';
 	$subject['visible'] = $_POST['visible'] ?? '';
 
-	$result = insert_subject($subject['menu_name'], $subject['position'], $subject['visible']);
-	$new_id = mysqli_insert_id($db);
+	$errors = insert_subject($subject);
+	if($errors === true) {
+		$new_id = mysqli_insert_id($db);
 		redirect_to(url_for('/staff/subjects/show.php?id=' . $new_id));
+	} 	
 }
 
 	$subject_set = find_all_subjects();
@@ -35,6 +37,7 @@ if(is_post_request()) {
   <div class="subject new">
     <h1>Create Subject</h1>
 
+		<?php echo display_errors($errors); ?>
     <form action="<?php echo url_for('/staff/subjects/new.php'); ?>" method="post">
       <dl>
         <dt>Menu Name</dt>

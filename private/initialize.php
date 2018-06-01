@@ -1,6 +1,6 @@
 <?php
 	ob_start(); // Ensure output bufferings is turned on.
-  
+
 	// Assign file paths to PHP constants
   // __FILE__ returns the current path to this file
   // dirname() returns the path to the parent directory
@@ -23,8 +23,10 @@
 	require_once('functions.php');
   require_once('database.php');
   require_once('query_functions.php');
+  require_once('validation_functions.php');
 
   $db = db_connect();
+  $errors = [];
 
   if (mysqli_connect_errno())
   {

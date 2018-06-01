@@ -38,9 +38,14 @@ $page = find_page_and_subject_name_by_page_id($id);
  				<dt>Visible</dt>
  				<dd><?php echo $page['visible'] == '1' ? 'true' : 'false'; ?></dd>
  			</dl>
-
- 	</div>
-
+ 			<dl>
+        <dt>Page Content</dt>
+        <dd>
+          <textarea rows="10" cols="50" readonly name="content"><?php echo $page['content']; ?></textarea> . 
+        </dd>
+      </dl>
+ 		</div>
+	</div>
 </div>
 
 <?php include(SHARED_PATH . '/staff_footer.php'); ?>
