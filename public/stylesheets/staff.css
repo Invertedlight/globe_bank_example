@@ -113,6 +113,14 @@ dd {
   margin-left: 5em;
 }
 
+.warning {
+  display: inline-block;
+  border: 2px solid red;
+  color: red;
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
 #operations {
   clear: both;
   margin: 1em 0 1em 75px;
