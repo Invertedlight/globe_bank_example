@@ -109,6 +109,10 @@ dd {
   margin-left: 1em;
 }
 
+.second_row {
+  margin-left: 5em;
+}
+
 #operations {
   clear: both;
   margin: 1em 0 1em 75px;

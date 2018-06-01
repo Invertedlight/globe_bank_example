@@ -2,6 +2,8 @@
 
 <?php
 $id = $_GET['id'] ?? '1'; //PHP > 7.0
+
+$page = find_page_and_subject_by_id($id); 
 ?>
 
 <?php $page_title = 'Show Page'; ?>
@@ -13,7 +15,29 @@ $id = $_GET['id'] ?? '1'; //PHP > 7.0
 
 	<div class="page show">
 
- 		Page ID: <?php echo h($id); ?>
+ 		<h1>Page: <?php echo h($page['menu_name']); ?></h1>
+
+ 		<div class="attributes">
+ 			<dl>
+ 				<dt>Menu Name</dt>
+ 				<dd><?php echo h($page['menu_name']); ?></dd>
+ 			</dl>
+ 			<dl>
+ 				<dt>Subject ID</dt>
+ 				<dd><?php echo h($page['subject_id']); ?></dd>
+ 			</dl>
+ 			<dl>
+ 				<dt>Subject Name</dt>
+ 				<dd><?php echo h($page['subject_name']); ?></dd>
+ 			</dl>
+ 			<dl>
+ 				<dt>Position</dt>
+ 				<dd><?php echo $page['position']; ?></dd>
+ 			</dl>
+ 			<dl>
+ 				<dt>Visible</dt>
+ 				<dd><?php echo $page['visible'] == '1' ? 'true' : 'false'; ?></dd>
+ 			</dl>
 
  	</div>
 
