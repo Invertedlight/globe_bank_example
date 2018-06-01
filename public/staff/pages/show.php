@@ -3,7 +3,7 @@
 <?php
 $id = $_GET['id'] ?? '1'; //PHP > 7.0
 
-$page = find_page_and_subject_by_id($id); 
+$page = find_page_and_subject_name_by_page_id($id); 
 ?>
 
 <?php $page_title = 'Show Page'; ?>
