@@ -1,6 +1,6 @@
 <?php
 	ob_start(); // Ensure output bufferings is turned on.
-  $html_errors = 1;
+  
 	// Assign file paths to PHP constants
   // __FILE__ returns the current path to this file
   // dirname() returns the path to the parent directory
